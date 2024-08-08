@@ -1,38 +1,24 @@
 package hexlet.code.schemas;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.Predicate;
+public class StringSchema extends BaseSchema<String> {
 
-public class StringSchema {
-    Map<String, Predicate<String>> checks = new LinkedHashMap<>();
-
+    @Override
     public void required() {
-        Predicate<String> predicate = value -> value != null && !value.isEmpty();
-        checks.put("required", predicate);
+        checks.put("required", value -> value != null && !value.isEmpty());
     }
 
     public StringSchema minLength(int minLength) {
-        Predicate<String> predicate = value -> value.length() >= minLength;
-        checks.put("minLength", predicate);
+        checks.put("minLength", value -> value.length() >= minLength);
         return this;
     }
 
     public StringSchema contains(String substring) {
-        Predicate<String> predicate = value -> value.contains(substring);
-        checks.put("contains", predicate);
+        checks.put("contains", value -> value.contains(substring));
         return this;
     }
 
+    @Override
     public boolean isValid(String value) {
-        Collection<Predicate<String>> predicates = checks.values();
-
-        for (var predicate : predicates) {
-            if (!predicate.test(value)) {
-                return false;
-            }
-        }
-        return true;
+        return super.isValid(value);
     }
 }
