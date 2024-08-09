@@ -5,8 +5,9 @@ import java.util.Objects;
 public class NumberSchema extends BaseSchema<Integer> {
 
     @Override
-    public void required() {
+    public NumberSchema required() {
         checks.put("required", Objects::nonNull);
+        return this;
     }
 
     public NumberSchema positive() {

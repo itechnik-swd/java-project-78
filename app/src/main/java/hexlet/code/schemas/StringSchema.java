@@ -3,8 +3,9 @@ package hexlet.code.schemas;
 public class StringSchema extends BaseSchema<String> {
 
     @Override
-    public void required() {
+    public StringSchema required() {
         checks.put("required", value -> value != null && !value.isEmpty());
+        return this;
     }
 
     public StringSchema minLength(int minLength) {
