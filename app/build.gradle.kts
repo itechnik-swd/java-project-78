@@ -28,10 +28,10 @@ checkstyle {
     toolVersion = "10.17.0"
 }
 
-jacoco {
-    toolVersion = "0.8.12"
-    reportsDirectory = layout.buildDirectory.dir("customJacocoReportDir")
-}
+//jacoco {
+//    toolVersion = "0.8.12"
+//    reportsDirectory = layout.buildDirectory.dir("customJacocoReportDir")
+//}
 
 tasks.test {
     useJUnitPlatform()
