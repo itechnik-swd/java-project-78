@@ -11,13 +11,12 @@ public class MapSchema extends BaseSchema<Map<String, String>> {
         return this;
     }
 
-    public MapSchema sizeof(int size) {
+    public void sizeof(int size) {
         checks.put("sizeof", map -> map.size() == size);
-        return this;
     }
 
-    @Override
-    public boolean isValid(Map<String, String> value) {
-        return super.isValid(value);
+    public void shape(Map<String, BaseSchema<String>> schemas) {
+        checks.put("shape", map -> map.entrySet().stream()
+                .allMatch(entry -> schemas.get(entry.getKey()).isValid((String) entry.getValue())));
     }
 }

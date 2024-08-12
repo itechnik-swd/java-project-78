@@ -18,9 +18,4 @@ public class NumberSchema extends BaseSchema<Integer> {
     public void range(int min, int max) {
         checks.put("range", value -> value >= min && value <= max);
     }
-
-    @Override
-    public boolean isValid(Integer value) {
-        return super.isValid(value);
-    }
 }

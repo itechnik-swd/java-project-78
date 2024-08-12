@@ -17,9 +17,4 @@ public class StringSchema extends BaseSchema<String> {
         checks.put("contains", value -> value.contains(substring));
         return this;
     }
-
-    @Override
-    public boolean isValid(String value) {
-        return super.isValid(value);
-    }
 }

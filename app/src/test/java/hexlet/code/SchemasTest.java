@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.MapSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -97,34 +99,38 @@ class SchemasTest {
     }
 
     @Test
-    void testAllSchemas() {
-        // Строки
-        StringSchema stringSchema = validator.string().required();
+    void testNestedValidation() {
+        MapSchema schema = validator.map();
 
-        assertThat(stringSchema.isValid("what does the fox say")).isTrue();
-        assertThat(stringSchema.isValid("")).isFalse();
+        // shape позволяет описывать валидацию для значений каждого ключа объекта Map.
+        // Создаём набор схем schemas для проверки каждого ключа проверяемого объекта
+        // Для значения каждого ключа - своя схема
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
 
-        // Числа
-        NumberSchema numberSchema = validator.number().required().positive();
+        // Определяем схемы валидации для значений свойств "firstName" и "lastName"
+        // Имя должно быть строкой, обязательно для заполнения
+        schemas.put("firstName", validator.string().required());
+        // Фамилия обязательна для заполнения и должна содержать не менее 2 символов
+        schemas.put("lastName", validator.string().required().minLength(2));
 
-        assertThat(numberSchema.isValid(-10)).isFalse();
-        assertThat(numberSchema.isValid(0)).isFalse();
+        // Настраиваем схему `MapSchema`
+        // Передаем созданный набор схем в метод shape()
+        schema.shape(schemas);
 
-        // Объект Map с поддержкой проверки структуры
-//        Map<String, BaseSchema> schemas = new HashMap<>();
-//        schemas.put("name", validator.string().required());
-//        schemas.put("age", validator.number().positive());
-//
-//        MapSchema schema = validator.map().sizeof(2).shape(schemas);
-//
-//        Map<String, Object> human1 = new HashMap<>();
-//        human1.put("name", "Kolya");
-//        human1.put("age", 100);
-//        assertThat(schema.isValid(human1)).isTrue();
-//
-//        Map<String, Object> human2 = new HashMap<>();
-//        human2.put("name", "");
-//        human2.put("age", null);
-//        assertThat(schema.isValid(human2)).isFalse();
+        // Проверяем объекты
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("lastName", "Smith");
+        assertThat(schema.isValid(human1)).isTrue();
+
+        Map<String, String> human2 = new HashMap<>();
+        human2.put("firstName", "John");
+        human2.put("lastName", null);
+        assertThat(schema.isValid(human2)).isFalse();
+
+        Map<String, String> human3 = new HashMap<>();
+        human3.put("firstName", "Anna");
+        human3.put("lastName", "B");
+        assertThat(schema.isValid(human3)).isFalse();
     }
 }
