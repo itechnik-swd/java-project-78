@@ -31,19 +31,19 @@ schema.isValid(-10); // false
 schema.isValid(10); // true
 
 // Объект Map с поддержкой проверки структуры
-Map<String, BaseSchema> schemas = new HashMap<>();
-schemas.put("name", v.string().required());
-schemas.put("age", v.number().positive());
+Map<String, BaseSchema<String>> schemas = new HashMap<>();
+schemas.put("firstName", v.string().required());
+        schemas.put("lastName", v.string().required().minLength(2));
 
 MapSchema schema = v.map().sizeof(2).shape(schemas);
 
 Map<String, Object> human1 = new HashMap<>();
-human1.put("name", "Kolya");
-human1.put("age", 100);
+human1.put("firstName", "John");
+human1.put("lastName", "Smith");
 schema.isValid(human1); // true
 
 Map<String, Object> human2 = new HashMap<>();
-human2.put("name", "");
-human2.put("age", null);
+human2.put("firstName", "Anna");
+human2.put("lastName", "B");
 schema.isValid(human2); // false
 ```
