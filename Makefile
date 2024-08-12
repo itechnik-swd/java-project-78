@@ -28,4 +28,7 @@ lint:
 build-run:
 	make -C app build-run
 
-.PHONY: bugit --versionild
+check-deps:
+	make -C app check-deps
+
+.PHONY: build

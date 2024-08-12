@@ -19,11 +19,8 @@ jobs:
       - uses: gradle/gradle-build-action@v3
         with:
           gradle-version: 8.5
-          arguments: build
-          build-root-directory: app
 
-      - run: cd app && ./gradlew checkstyleMain
-      - run: cd app && ./gradlew test
+      - run: make lint && make test
 
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v5.0.0
