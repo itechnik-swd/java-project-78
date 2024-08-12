@@ -23,7 +23,7 @@ jobs:
           build-root-directory: app
 
       - run: cd app && ./gradlew checkstyleMain
-      - run: ./gradlew test
+      - run: cd app && ./gradlew test
 
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v5.0.0
