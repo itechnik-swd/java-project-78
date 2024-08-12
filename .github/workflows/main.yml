@@ -19,9 +19,10 @@ jobs:
       - uses: gradle/gradle-build-action@v3
         with:
           gradle-version: 8.5
+          arguments: build
           build-root-directory: app
 
-      - run: ./gradlew checkstyleMain
+      - run: cd app && ./gradlew checkstyleMain
       - run: ./gradlew test
 
       - name: Publish code coverage
