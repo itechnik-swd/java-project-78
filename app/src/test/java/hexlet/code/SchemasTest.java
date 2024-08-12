@@ -4,92 +4,94 @@ import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.MapSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
-import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 class SchemasTest {
-    Validator validator = new Validator();
+    private final Validator validator = new Validator();
 
     @Test
     void testStringSchema() {
         StringSchema schema = validator.string();
 
         // Пока не вызван метод required(), null и пустая строка считаются валидными
-        assertThat(schema.isValid("")).isTrue();
-        assertThat(schema.isValid(null)).isTrue();
-        assertThat(schema.isValid("hexlet")).isTrue();
+        assertTrue(schema.isValid(""));
+        assertTrue(schema.isValid(null));
+        assertTrue(schema.isValid("hexlet"));
 
         schema.required();
 
-        assertThat(schema.isValid("")).isFalse();
-        assertThat(schema.isValid(null)).isFalse();
-        assertThat(schema.isValid("what does the fox say")).isTrue();
+        assertFalse(schema.isValid(""));
+        assertFalse(schema.isValid(null));
+        assertTrue(schema.isValid("what does the fox say"));
 
-        assertThat(schema.contains("wh").isValid("what does the fox say")).isTrue();
-        assertThat(schema.contains("what").isValid("what does the fox say")).isTrue();
-        assertThat(schema.contains("whatthe").isValid("what does the fox say")).isFalse();
+        assertTrue(schema.contains("wh").isValid("what does the fox say"));
+        assertTrue(schema.contains("what").isValid("what does the fox say"));
+        assertFalse(schema.contains("whatthe").isValid("what does the fox say"));
 
-        assertThat(schema.isValid("what does the fox say")).isFalse();
+        assertFalse(schema.isValid("what does the fox say"));
         // Здесь уже false, так как добавлена еще одна проверка contains("whatthe")
 
         // Если один валидатор вызывался несколько раз,
         // то последний имеет приоритет (перетирает предыдущий)
         StringSchema schema1 = validator.string();
-        assertThat(schema1.minLength(10).minLength(4).isValid("Hexlet")).isTrue();
+        assertTrue(schema1.minLength(10).minLength(4).isValid("Hexlet"));
     }
 
     @Test
     void testNumberSchema() {
         NumberSchema schema = validator.number();
 
-        assertThat(schema.isValid(5)).isTrue();
-        assertThat(schema.isValid(-0)).isTrue();
-        assertThat(schema.isValid(null)).isTrue();
+        assertTrue(schema.isValid(5));
+        assertTrue(schema.isValid(-0));
+        assertTrue(schema.isValid(null));
         // Пока не вызван метод required(), null считается валидным
-        assertThat(schema.positive().isValid(null)).isTrue();
+        assertTrue(schema.positive().isValid(null));
 
         schema.required();
 
-        assertThat(schema.isValid(null)).isFalse();
-        assertThat(schema.isValid(10)).isTrue();
+        assertFalse(schema.isValid(null));
+        assertTrue(schema.isValid(10));
 
         // Потому что ранее мы вызвали метод positive()
-        assertThat(schema.isValid(-10)).isFalse();
+        assertFalse(schema.isValid(-10));
         //  Ноль — не положительное число
-        assertThat(schema.isValid(0)).isFalse();
+        assertFalse(schema.isValid(0));
 
         schema.range(5, 10); // Проверка диапазона
 
-        assertThat(schema.isValid(5)).isTrue();
-        assertThat(schema.isValid(10)).isTrue();
-        assertThat(schema.isValid(4)).isFalse();
-        assertThat(schema.isValid(11)).isFalse();
+        assertTrue(schema.isValid(5));
+        assertTrue(schema.isValid(10));
+        assertFalse(schema.isValid(4));
+        assertFalse(schema.isValid(11));
     }
 
     @Test
     void testMapSchema() {
         MapSchema schema = validator.map();
 
-        assertThat(schema.isValid(null)).isTrue();
+        assertTrue(schema.isValid(null));
 
         schema.required();
 
-        assertThat(schema.isValid(null)).isFalse();
-        assertThat(schema.isValid(new HashMap<>())).isTrue();
+        assertFalse(schema.isValid(null));
+        assertTrue(schema.isValid(new HashMap<>()));
 
         var data = new HashMap<String, String>();
         data.put("key1", "value1");
-        assertThat(schema.isValid(data)).isTrue();
+        assertTrue(schema.isValid(data));
 
         schema.sizeof(2);
 
-        assertThat(schema.isValid(data)).isFalse();
+        assertFalse(schema.isValid(data));
         data.put("key2", "value2");
-        assertThat(schema.isValid(data)).isTrue();
+        assertTrue(schema.isValid(data));
     }
 
     @Test
@@ -115,16 +117,16 @@ class SchemasTest {
         Map<String, String> human1 = new HashMap<>();
         human1.put("firstName", "John");
         human1.put("lastName", "Smith");
-        assertThat(schema.isValid(human1)).isTrue();
+        assertTrue(schema.isValid(human1));
 
         Map<String, String> human2 = new HashMap<>();
         human2.put("firstName", "John");
         human2.put("lastName", null);
-        assertThat(schema.isValid(human2)).isFalse();
+        assertFalse(schema.isValid(human2));
 
         Map<String, String> human3 = new HashMap<>();
         human3.put("firstName", "Anna");
         human3.put("lastName", "B");
-        assertThat(schema.isValid(human3)).isFalse();
+        assertFalse(schema.isValid(human3));
     }
 }
