@@ -33,7 +33,7 @@ schema.isValid(10); // true
 // Объект Map с поддержкой проверки структуры
 Map<String, BaseSchema<String>> schemas = new HashMap<>();
 schemas.put("firstName", v.string().required());
-        schemas.put("lastName", v.string().required().minLength(2));
+schemas.put("lastName", v.string().required().minLength(2));
 
 MapSchema schema = v.map().sizeof(2).shape(schemas);
 

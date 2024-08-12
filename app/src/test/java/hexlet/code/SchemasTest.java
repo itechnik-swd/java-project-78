@@ -4,7 +4,6 @@ import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.MapSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -13,12 +12,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SchemasTest {
-    Validator validator;
-
-    @BeforeEach
-    void setUp() {
-        validator = new Validator();
-    }
+    Validator validator = new Validator();
 
     @Test
     void testStringSchema() {

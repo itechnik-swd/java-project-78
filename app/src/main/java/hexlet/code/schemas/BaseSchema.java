@@ -9,7 +9,7 @@ public abstract class BaseSchema<T> {
 
     protected abstract BaseSchema<T> required();
 
-    public boolean isValid(T value) {
+    public final boolean isValid(T value) {
         if (value == null) {
             return !checks.containsKey("required");
         }
