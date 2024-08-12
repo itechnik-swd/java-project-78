@@ -19,7 +19,7 @@ jobs:
       - uses: gradle/gradle-build-action@v3
         with:
           gradle-version: 8.5
-          build-file: app/build.gradle
+          build-root-dir: app/src/main/java
 
       - run: ./gradlew checkstyleMain
       - run: ./gradlew test
