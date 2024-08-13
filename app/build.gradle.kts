@@ -21,17 +21,11 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.puppycrawl.tools/checkstyle
     implementation("com.puppycrawl.tools:checkstyle:10.17.0")
-
 }
 
 checkstyle {
     toolVersion = "10.17.0"
 }
-
-//jacoco {
-//    toolVersion = "0.8.12"
-//    reportsDirectory = layout.buildDirectory.dir("customJacocoReportDir")
-//}
 
 tasks.test {
     useJUnitPlatform()
